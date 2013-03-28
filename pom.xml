@@ -51,6 +51,16 @@
         </license>
     </licenses>
 
+    <mailingLists>
+        <mailingList>
+            <name>Nanoko</name>
+            <subscribe>https://groups.google.com/group/nanoko</subscribe>
+            <unsubscribe>https://groups.google.com/group/nanoko</unsubscribe>
+            <post>nanoko@googlegroups.com</post>
+            <archive>https://groups.google.com/group/nanoko</archive>
+        </mailingList>
+    </mailingLists>
+
     <dependencies>
         <dependency>
             <groupId>org.nanoko.libs</groupId>
