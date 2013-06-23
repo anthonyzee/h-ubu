@@ -407,7 +407,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
   utils.typeOf = function(obj) {
     var classToType, myClass, name, _i, _len, _ref1;
-    if (!(obj != null)) {
+    if (obj == null) {
       return new String(obj);
     }
     classToType = new Object;
@@ -442,7 +442,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
   utils.isObjectConformToContract = function(object, contract) {
     var props;
     for (props in contract) {
-      if (!(object[props] != null)) {
+      if (object[props] == null) {
         logger.warn("Object not conform to contract - property " + props + " missing");
         return false;
       } else {
@@ -505,7 +505,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 
   utils.defineFunctionIfNotExist = function(obj, name, func) {
-    if (!(obj[name] != null)) {
+    if (obj[name] == null) {
       obj[name] = func;
       return true;
     }
@@ -522,7 +522,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
   utils.clone = function(obj, excludes) {
     var flags, key, newInstance;
-    if (!(obj != null) || typeof obj !== 'object') {
+    if ((obj == null) || typeof obj !== 'object') {
       return obj;
     }
     if (obj instanceof Date) {
@@ -611,7 +611,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 
   utils.isComponent = function(component) {
-    if (!(component != null)) {
+    if (component == null) {
       return false;
     }
     return this.isObjectConformToContract(component, new HUBU.AbstractComponent());
@@ -729,27 +729,27 @@ Returned objects do not intend to be used, they are just mock / empty instances.
       this._listeners = [];
       myExtension = this;
       /*
-          # Gets the registered event listeners.
-          # *Do not modified the result !*
-          # @return the list of registered listeners.
+      # Gets the registered event listeners.
+      # *Do not modified the result !*
+      # @return the list of registered listeners.
       */
 
       this._hub.getListeners = function() {
         return myExtension._listeners;
       };
       /*
-          # Registers an event listener.
-          # This method can take either 2 or 3 arguments. The first one is *always* the component, so two signatures are possible:
-          #
-          # * `registerListener(component, match, callback)` where `match` is the matching function and `callback` is the
-          # reception callback.
-          # * `registerListener(component, conf)` where `conf` is an object containing `match` and `callback` specifying
-          # respectively the event matching method and the reception callback.
-          #
-          # @param {HUBU.AbstractComponent} component : the component registering the listener
-          # @param {Function} match : the method called to check if the event matches. This method must returns true or false.
-          # @param {Function} callback : the callback method to invoke when a matching event is sent
-          # @return the hub
+      # Registers an event listener.
+      # This method can take either 2 or 3 arguments. The first one is *always* the component, so two signatures are possible:
+      #
+      # * `registerListener(component, match, callback)` where `match` is the matching function and `callback` is the
+      # reception callback.
+      # * `registerListener(component, conf)` where `conf` is an object containing `match` and `callback` specifying
+      # respectively the event matching method and the reception callback.
+      #
+      # @param {HUBU.AbstractComponent} component : the component registering the listener
+      # @param {Function} match : the method called to check if the event matches. This method must returns true or false.
+      # @param {Function} callback : the callback method to invoke when a matching event is sent
+      # @return the hub
       */
 
       this._hub.registerListener = function() {
@@ -764,7 +764,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         }
       };
       /*
-          # *Deprecated method*, use `registerListener` instead.
+      # *Deprecated method*, use `registerListener` instead.
       */
 
       this._hub.registerConfigurableListener = function(component, conf) {
@@ -773,15 +773,15 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         return this;
       };
       /*
-          # Unregisters listeners for the given component. According to the arguments, several cases occur:
-          # `component` can be either a String of a Component. In case of the string, we look up for the component using
-          # `getComponentName`.
-          # If `callback` is defined, only the listener matching component and callback will be unregistered. Otherwise all
-          # listeners of the component will be unregistered.
-          # If `component` is `null`, this methods does nothing.
-          # @param {HUBU.AbstractComponent} component the component
-          # @param {Function} callback the callback function (optional)
-          # @return the current hub
+      # Unregisters listeners for the given component. According to the arguments, several cases occur:
+      # `component` can be either a String of a Component. In case of the string, we look up for the component using
+      # `getComponentName`.
+      # If `callback` is defined, only the listener matching component and callback will be unregistered. Otherwise all
+      # listeners of the component will be unregistered.
+      # If `component` is `null`, this methods does nothing.
+      # @param {HUBU.AbstractComponent} component the component
+      # @param {Function} callback the callback function (optional)
+      # @return the current hub
       */
 
       this._hub.unregisterListener = function(component, callback) {
@@ -789,25 +789,25 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         return this;
       };
       /*
-          # Sends an event inside the hub. If component or event is null, the method does nothing. If not, the event processed
-          # and sent to all matching listeners.
-          # @param {HUBU.AbstractComponent} component the component sending the event
-          # @param {Object} event the event
-          # @return true if the event was delivered to at least one component, false otherwise
-          # @methodOf HUBU.hubu
+      # Sends an event inside the hub. If component or event is null, the method does nothing. If not, the event processed
+      # and sent to all matching listeners.
+      # @param {HUBU.AbstractComponent} component the component sending the event
+      # @param {Object} event the event
+      # @return true if the event was delivered to at least one component, false otherwise
+      # @methodOf HUBU.hubu
       */
 
       this._hub.sendEvent = function(component, event) {
         return myExtension.sendEvent(component, event);
       };
       /*
-          # Subscribes to a specific topic.
-          # @param {HUBU.AbstractComponent} component : the component registering the listener
-          # @param {String} topic : the topic (Regexp)
-          # @param {Function} callback : the callback method to invoke when a matching event is sent
-          # @param {Function} filter : optional method to filter received events.
-          # @return the current hub
-          # @methodOf HUBU.hubu
+      # Subscribes to a specific topic.
+      # @param {HUBU.AbstractComponent} component : the component registering the listener
+      # @param {String} topic : the topic (Regexp)
+      # @param {Function} callback : the callback method to invoke when a matching event is sent
+      # @param {Function} filter : optional method to filter received events.
+      # @return the current hub
+      # @methodOf HUBU.hubu
       */
 
       this._hub.subscribe = function(component, topic, callback, filter) {
@@ -815,11 +815,11 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         return this;
       };
       /*
-          # Unsubscribes the subscriber.
-          # @param {Object} component the component
-          # @param {Function} callback the registered callback
-          # @methodOf HUBU.hubu
-          # @return the current hub
+      # Unsubscribes the subscriber.
+      # @param {Object} component the component
+      # @param {Function} callback the registered callback
+      # @methodOf HUBU.hubu
+      # @return the current hub
       */
 
       this._hub.unsubscribe = function(component, callback) {
@@ -827,13 +827,13 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         return this;
       };
       /*
-          # Publishes an event to a specific topic. If component, topic or event is null, the method does nothing. If not,
-          # the event is processed and sent to all matching listeners.
-          # @param {HUBU.AbstractComponent} component the component sending the event
-          # @param {String} topic the topic
-          # @param {Object} event the event
-          # @return true if the event was delivered to at least one component, false otherwise
-          # @methodOf HUBU.hubu
+      # Publishes an event to a specific topic. If component, topic or event is null, the method does nothing. If not,
+      # the event is processed and sent to all matching listeners.
+      # @param {HUBU.AbstractComponent} component the component sending the event
+      # @param {String} topic the topic
+      # @param {Object} event the event
+      # @return true if the event was delivered to at least one component, false otherwise
+      # @methodOf HUBU.hubu
       */
 
       this._hub.publish = function(component, topic, event) {
@@ -847,18 +847,18 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
 
     /*
-      # Processes the given event sent by the given component. This methods checks who is interested by the event by
-      # calling the match method, then the callback method is called.
-      # The event is extended with the 'source' property indicating the component sending the event.
-      # @param {Object} event
-      # @param {AbstractComponent} component
-      # @return true if the event was consumed by at least one component, false otherwise.
+    # Processes the given event sent by the given component. This methods checks who is interested by the event by
+    # calling the match method, then the callback method is called.
+    # The event is extended with the 'source' property indicating the component sending the event.
+    # @param {Object} event
+    # @param {AbstractComponent} component
+    # @return true if the event was consumed by at least one component, false otherwise.
     */
 
 
     Eventing.prototype._processEvent = function(component, event) {
       var ev, listener, sent, _i, _len, _ref;
-      if (!(event != null) || !(component != null)) {
+      if ((event == null) || (component == null)) {
         HUBU.logger.warn("Can't process event - component or event not defined");
         return false;
       }
@@ -869,7 +869,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         if (!(listener.component !== component && HUBU.UTILS.indexOf(this._listeners, listener) !== -1)) {
           continue;
         }
-        ev = !(event.clone != null) || event.clone ? HUBU.UTILS.clone(event) : event;
+        ev = (event.clone == null) || event.clone ? HUBU.UTILS.clone(event) : event;
         ev.source = component;
         if (listener.match.apply(listener.component, [ev])) {
           listener.callback.apply(listener.component, [ev]);
@@ -893,7 +893,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
           match = others[0].match;
           callback = others[0].callback;
       }
-      if (!(component != null) || !(match != null) || !(callback != null)) {
+      if ((component == null) || (match == null) || (callback == null)) {
         throw new Exception("Cannot register event listener, component or match or callback is/are not defined").add("component", component).add("match", match).add("callback", callback);
       }
       if (!HUBU.UTILS.isComponentPlugged(component, this._hub)) {
@@ -909,12 +909,12 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
     Eventing.prototype.unregisterListener = function(component, callback) {
       var cmp, listener, toRemove, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _results;
-      if (!(component != null)) {
+      if (component == null) {
         HUBU.logger.warn("Cannot unregister listener - component not defined");
         return false;
       }
       cmp = this.getComponent(component);
-      if (!(cmp != null)) {
+      if (cmp == null) {
         HUBU.logger.warn("Cannot unregister listener - component not plugged on the hub");
         return false;
       }
@@ -945,9 +945,9 @@ Returned objects do not intend to be used, they are just mock / empty instances.
     };
 
     /*
-      # Helper method retriving a component object from the given argument.
-      # If the argument is a String, it performs a lookup by name
-      # If the argument is a component object, it just checks the conformity
+    # Helper method retriving a component object from the given argument.
+    # If the argument is a String, it performs a lookup by name
+    # If the argument is a component object, it just checks the conformity
     */
 
 
@@ -962,7 +962,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
     };
 
     Eventing.prototype.sendEvent = function(component, event) {
-      if (!(component != null) || !(event != null)) {
+      if ((component == null) || (event == null)) {
         HUBU.logger.warn("Cannot send event, component or/and event are undefined");
         return;
       }
@@ -971,13 +971,13 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
     Eventing.prototype.subscribe = function(component, topic, callback, filter) {
       var match, regex;
-      if (!(component != null) || !(topic != null) || !(callback != null)) {
+      if ((component == null) || (topic == null) || (callback == null)) {
         HUBU.logger.warn("Cannot subscribe to topic, component or/and topic and/or callback are undefined");
         return;
       }
       regex = new RegExp(topic);
       match = null;
-      if (!(filter != null) || !HUBU.UTILS.isFunction(filter)) {
+      if ((filter == null) || !HUBU.UTILS.isFunction(filter)) {
         match = function(event) {
           return regex.test(event.topic);
         };
@@ -994,7 +994,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
     };
 
     Eventing.prototype.publish = function(component, topic, event) {
-      if (!(component != null) || !(topic != null) || !(event != null)) {
+      if ((component == null) || (topic == null) || (event == null)) {
         HUBU.logger.info("Cannot publish event - component and/or topic and/or event are missing");
         return false;
       }
@@ -1067,9 +1067,9 @@ Returned objects do not intend to be used, they are just mock / empty instances.
     }
 
     /*
-      # Helper method retriving a component object from the given argument.
-      # If the argument is a String, it performs a lookup by name
-      # If the argument is a component object, it just checks the conformity
+    # Helper method retriving a component object from the given argument.
+    # If the argument is a String, it performs a lookup by name
+    # If the argument is a component object, it just checks the conformity
     */
 
 
@@ -1090,7 +1090,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         if (!HUBU.UTILS.isObjectConformToContract(component, binding.contract)) {
           throw new Exception("Cannot bind components, the component is not conform to contract").add("component", component.getComponentName()).add("contract", binding.contract);
         } else {
-          if (!(binding.proxy != null) || binding.proxy) {
+          if ((binding.proxy == null) || binding.proxy) {
             return HUBU.UTILS.createProxyForContract(binding.contract, component);
           }
         }
@@ -1100,15 +1100,15 @@ Returned objects do not intend to be used, they are just mock / empty instances.
 
     Binding.prototype.bind = function(binding) {
       var component, to;
-      if (!(binding != null) || !(binding != null ? binding.to : void 0) || !(binding != null ? binding.component : void 0) || !(binding != null ? binding.into : void 0)) {
+      if ((binding == null) || !(binding != null ? binding.to : void 0) || !(binding != null ? binding.component : void 0) || !(binding != null ? binding.into : void 0)) {
         throw new Exception("Cannot bind components - component, to and into must be defined");
       }
       component = this.getComponent(binding.component);
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot bind components - 'component' is invalid").add("component", binding.component);
       }
       to = this.getComponent(binding.to);
-      if (!(to != null)) {
+      if (to == null) {
         throw new Exception("Cannot bind components - 'to' is invalid").add("component", binding.to);
       }
       component = this.getInjectedObject(binding, component);
@@ -1116,7 +1116,7 @@ Returned objects do not intend to be used, they are just mock / empty instances.
         case "function":
           return binding.into.apply(to, [component]);
         case "string":
-          if (!(to[binding.into] != null)) {
+          if (to[binding.into] == null) {
             return to[binding.into] = component;
           } else if (HUBU.UTILS.isFunction(to[binding.into])) {
             return to[binding.into].apply(to, [component]);
@@ -1211,19 +1211,19 @@ TODO Factories / Object creation strategy ?
 
     function ServiceRegistration(contract, component, svcObject, properties, hub, registry) {
       this._id = -1;
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot create a service registration without a valid component");
       }
-      if (!(svcObject != null)) {
+      if (svcObject == null) {
         throw new Exception("Cannot create a service registration without a valid service object");
       }
-      if (!(contract != null)) {
+      if (contract == null) {
         throw new Exception("Cannot create a service registration without a contract");
       }
-      if (!(hub != null)) {
+      if (hub == null) {
         throw new Exception("Cannot create a service registration without the hub");
       }
-      if (!(registry != null)) {
+      if (registry == null) {
         throw new Exception("Cannot create a service registration without the registry");
       }
       this._component = component;
@@ -1380,15 +1380,15 @@ TODO Factories / Object creation strategy ?
     function ServiceRegistry(hub) {
       this._registrations = [];
       this._listeners = [];
-      if (!(hub != null)) {
+      if (hub == null) {
         throw new Exception("Cannot initialize the service registry without a hub");
       }
       this._hub = hub;
     }
 
     /*
-      # Gets all registered services.
-      # @return the list of service references, empty if no services are registered
+    # Gets all registered services.
+    # @return the list of service references, empty if no services are registered
     */
 
 
@@ -1408,7 +1408,7 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # Adds a service registration
+    # Adds a service registration
     */
 
 
@@ -1421,7 +1421,7 @@ TODO Factories / Object creation strategy ?
           cmpEntry = entry;
         }
       }
-      if (!(cmpEntry != null)) {
+      if (cmpEntry == null) {
         cmpEntry = {
           'component': component,
           'registrations': []
@@ -1440,7 +1440,7 @@ TODO Factories / Object creation strategy ?
           cmpEntry = entry;
         }
       }
-      if (!(cmpEntry != null)) {
+      if (cmpEntry == null) {
         return null;
       }
       HUBU.UTILS.removeElementFromArray(cmpEntry.registrations, reg);
@@ -1451,17 +1451,17 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # Registers a service
-      # @return the service registration
+    # Registers a service
+    # @return the service registration
     */
 
 
     ServiceRegistry.prototype.registerService = function(component, contract, properties, svcObject) {
       var reg;
-      if (!(contract != null)) {
+      if (contract == null) {
         throw new Exception("Cannot register a service without a proper contract");
       }
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot register a service without a valid component");
       }
       svcObject = svcObject != null ? svcObject : component;
@@ -1477,13 +1477,13 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # Unregisters a service
+    # Unregisters a service
     */
 
 
     ServiceRegistry.prototype.unregisterService = function(registration) {
       var component, ref;
-      if (!(registration != null)) {
+      if (registration == null) {
         throw new Exception("Cannot unregister the service - invalid registration");
       }
       component = this._removeRegistration(registration);
@@ -1498,7 +1498,7 @@ TODO Factories / Object creation strategy ?
 
     ServiceRegistry.prototype.unregisterServices = function(component) {
       var cmpEntry, entry, reg, regs, _i, _j, _len, _len1, _ref1;
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot unregister the services - invalid component");
       }
       _ref1 = this._registrations;
@@ -1525,8 +1525,8 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # Traverses the registered services to select the ones matching with the given filter (method)
-      # It returns an empty array if ne matching service can be found
+    # Traverses the registered services to select the ones matching with the given filter (method)
+    # It returns an empty array if ne matching service can be found
     */
 
 
@@ -1548,20 +1548,20 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # Build an object with a `match` function built from the contract and the filter.
+    # Build an object with a `match` function built from the contract and the filter.
     */
 
 
     ServiceRegistry.prototype._buildFilter = function(contract, filter) {
       var container,
         _this = this;
-      if (!(contract != null) && !(filter != null)) {
+      if ((contract == null) && (filter == null)) {
         return {
           match: function(ref) {
             return true;
           }
         };
-      } else if ((contract != null) && !(filter != null)) {
+      } else if ((contract != null) && (filter == null)) {
         container = {};
         container.contract = contract;
         container.match = function(ref) {
@@ -1587,7 +1587,7 @@ TODO Factories / Object creation strategy ?
     };
 
     ServiceRegistry.prototype.getService = function(component, ref) {
-      if (!(ref != null)) {
+      if (ref == null) {
         throw new Exception("Cannot get service - the reference is null");
       }
       if (!ref.isValid()) {
@@ -1602,7 +1602,7 @@ TODO Factories / Object creation strategy ?
     ServiceRegistry.prototype.registerServiceListener = function(listenerConfig) {
       var contract, filter, listener, newFilter, svcListener;
       contract = listenerConfig.contract, filter = listenerConfig.filter, listener = listenerConfig.listener;
-      if (!(listener != null)) {
+      if (listener == null) {
         throw new Exception("Can't register the service listener, the listener is not set").add("listenerConfig", listenerConfig);
       }
       newFilter = this._buildFilter(contract, filter);
@@ -1622,7 +1622,7 @@ TODO Factories / Object creation strategy ?
     ServiceRegistry.prototype.unregisterServiceListener = function(listenerConfig) {
       var contract, filter, list, listener, _i, _len, _ref1, _results;
       contract = listenerConfig.contract, filter = listenerConfig.filter, listener = listenerConfig.listener;
-      if (!(listener != null)) {
+      if (listener == null) {
         throw new Exception("Can't unregister the service listener, the listener is not set").add("listenerConfig", listenerConfig);
       }
       _ref1 = this._listeners.slice();
@@ -1637,7 +1637,7 @@ TODO Factories / Object creation strategy ?
     };
 
     /*
-      # This method should be used by the extension only.
+    # This method should be used by the extension only.
     */
 
 
@@ -1647,7 +1647,7 @@ TODO Factories / Object creation strategy ?
       _results = [];
       for (_i = 0, _len = _ref1.length; _i &lt; _len; _i++) {
         listener = _ref1[_i];
-        matched = !(listener.filter != null) || this._testAgainstFilter(listener, event.getReference());
+        matched = (listener.filter == null) || this._testAgainstFilter(listener, event.getReference());
         if (matched) {
           _results.push(this._invokeServiceListener(listener, event));
         } else if (event.getType() === SOC.ServiceEvent.MODIFIED && (oldRef != null)) {
@@ -2109,13 +2109,13 @@ represents the published and required services for a specific h-ubu's component.
       this._name = name != null ? name : this._contract;
       if (bind != null) {
         this._bind = HUBU.UTILS.isFunction(bind) ? bind : this._component[bind];
-        if (!(this._bind != null)) {
+        if (this._bind == null) {
           throw new Exception("Bind method " + bind + " not found on component");
         }
       }
       if (unbind != null) {
         this._unbind = HUBU.UTILS.isFunction(unbind) ? unbind : this._component[unbind];
-        if (!(this._unbind != null)) {
+        if (this._unbind == null) {
           throw new Exception("Unbind method " + unbind + " not found on component");
         }
       }
@@ -2126,7 +2126,7 @@ represents the published and required services for a specific h-ubu's component.
       this._listener = {
         contract: this._contract,
         filter: function(ref) {
-          return ref.getProperty("service.publisher") !== self._component && (!(self._filter != null) || self._filter(ref));
+          return ref.getProperty("service.publisher") !== self._component && ((self._filter == null) || self._filter(ref));
         },
         listener: function(event) {
           switch (event.getType()) {
@@ -2242,7 +2242,7 @@ represents the published and required services for a specific h-ubu's component.
           refEntry = entry;
         }
       }
-      if (!(refEntry != null)) {
+      if (refEntry == null) {
         refEntry = {
           reference: ref,
           service: null
@@ -2296,7 +2296,7 @@ represents the published and required services for a specific h-ubu's component.
           refEntry = entry;
         }
       }
-      if (!(refEntry != null)) {
+      if (refEntry == null) {
         return this._onServiceArrival(ref);
       }
     };
@@ -2306,7 +2306,7 @@ represents the published and required services for a specific h-ubu's component.
       svc = this._hub.getService(this._serviceComponent, entry.reference);
       entry.service = svc;
       if ((this._field != null) && this._aggregate) {
-        if (!(this._component[this._field] != null)) {
+        if (this._component[this._field] == null) {
           this._component[this._field] = [svc];
         } else {
           this._component[this._field].push(svc);
@@ -2390,25 +2390,25 @@ represents the published and required services for a specific h-ubu's component.
       this._properties = properties;
       if (preRegistration != null) {
         this._preRegistration = HUBU.UTILS.isFunction(preRegistration) ? preRegistration : this._component[preRegistration];
-        if (!(this._preRegistration != null)) {
+        if (this._preRegistration == null) {
           throw new Exception("preRegistration method " + preRegistration + " not found on component");
         }
       }
       if (postRegistration != null) {
         this._postRegistration = HUBU.UTILS.isFunction(postRegistration) ? postRegistration : this._component[postRegistration];
-        if (!(this._postRegistration != null)) {
+        if (this._postRegistration == null) {
           throw new Exception("postRegistration method " + postRegistration + " not found on component");
         }
       }
       if (preUnregistration != null) {
         this._preUnregistration = HUBU.UTILS.isFunction(preUnregistration) ? preUnregistration : this._component[preUnregistration];
-        if (!(this._preUnregistration != null)) {
+        if (this._preUnregistration == null) {
           throw new Exception("preUnregistration method " + preUnregistration + " not found on component");
         }
       }
       if (postUnregistration != null) {
         this._postUnRegistration = HUBU.UTILS.isFunction(postUnregistration) ? postUnregistration : this._component[postUnregistration];
-        if (!(this._postUnRegistration != null)) {
+        if (this._postUnRegistration == null) {
           throw new Exception("postUnregistration method " + postUnregistration + " not found on component");
         }
       }
@@ -2436,7 +2436,7 @@ represents the published and required services for a specific h-ubu's component.
     };
 
     ProvidedService.prototype._unregister = function() {
-      if (!(this._registration != null)) {
+      if (this._registration == null) {
         return false;
       }
       if (this._preUnregistration != null) {
@@ -2700,11 +2700,11 @@ represents the published and required services for a specific h-ubu's component.
             cmpEntry = entry;
           }
         }
-        if (!(cmpEntry != null)) {
+        if (cmpEntry == null) {
           return null;
         }
         dep = cmpEntry.serviceComponent.getServiceDependencyByName(name);
-        if (!(dep != null)) {
+        if (dep == null) {
           throw new Exception("No dependency " + name + " on component " + cmpEntry.component.getComponentName());
         }
         svc = dep.locateServices();
@@ -2733,11 +2733,11 @@ represents the published and required services for a specific h-ubu's component.
             cmpEntry = entry;
           }
         }
-        if (!(cmpEntry != null)) {
+        if (cmpEntry == null) {
           return null;
         }
         dep = cmpEntry.serviceComponent.getServiceDependencyByName(name);
-        if (!(dep != null)) {
+        if (dep == null) {
           throw new Exception("No dependency " + name + " on component " + cmpEntry.component.getComponentName());
         }
         svc = dep.locateServices();
@@ -2753,7 +2753,7 @@ represents the published and required services for a specific h-ubu's component.
 
 
     /*
-      # The given component is unregistered from the hub. We needs to unregisters all services.
+    # The given component is unregistered from the hub. We needs to unregisters all services.
     */
 
 
@@ -2774,7 +2774,7 @@ represents the published and required services for a specific h-ubu's component.
     ServiceOrientation.prototype.requireService = function(description) {
       var aggregate, bind, component, contract, field, filter, name, optional, req, unbind;
       component = description.component, contract = description.contract, filter = description.filter, aggregate = description.aggregate, optional = description.optional, field = description.field, bind = description.bind, unbind = description.unbind, name = description.name;
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot require a service without a valid component");
       }
       if (aggregate == null) {
@@ -2789,7 +2789,7 @@ represents the published and required services for a specific h-ubu's component.
       if (filter == null) {
         filter = null;
       }
-      if (!(field != null) && !(bind != null) && !(name != null)) {
+      if ((field == null) && (bind == null) && (name == null)) {
         throw new Exception("Cannot require a service - field or bind must be set");
       }
       if (field == null) {
@@ -2804,7 +2804,7 @@ represents the published and required services for a specific h-ubu's component.
       if (name == null) {
         name = contract;
       }
-      if (!(field != null) && !(bind != null)) {
+      if ((field == null) && (bind == null)) {
         optional = true;
       }
       req = new HUBU.ServiceDependency(component, contract, filter, aggregate, optional, field, bind, unbind, name, this._hub);
@@ -2814,10 +2814,10 @@ represents the published and required services for a specific h-ubu's component.
     ServiceOrientation.prototype.provideService = function(description) {
       var component, contract, postRegistration, postUnregistration, preRegistration, preUnregistration, properties, ps;
       component = description.component, contract = description.contract, properties = description.properties, preRegistration = description.preRegistration, postRegistration = description.postRegistration, preUnregistration = description.preUnregistration, postUnregistration = description.postUnregistration;
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot provided a service without a valid component");
       }
-      if (!(contract != null)) {
+      if (contract == null) {
         throw new Exception("Cannot provided a service without a valid contract");
       }
       if (properties == null) {
@@ -2837,7 +2837,7 @@ represents the published and required services for a specific h-ubu's component.
           cmpEntry = entry;
         }
       }
-      if (!(cmpEntry != null)) {
+      if (cmpEntry == null) {
         cmpEntry = {
           'component': comp,
           'serviceComponent': new HUBU.ServiceComponent(comp)
@@ -2861,7 +2861,7 @@ represents the published and required services for a specific h-ubu's component.
           cmpEntry = entry;
         }
       }
-      if (!(cmpEntry != null)) {
+      if (cmpEntry == null) {
         cmpEntry = {
           'component': comp,
           'serviceComponent': new HUBU.ServiceComponent(comp)
@@ -3018,10 +3018,10 @@ represents the published and required services for a specific h-ubu's component.
       if ((parent != null)) {
         this._parentHub = parent;
       }
-      if (!(this._name != null)) {
+      if (this._name == null) {
         this._name = ((configuration != null ? configuration.component_name : void 0) != null) ? configuration.component_name : "hub";
       }
-      if (!(this._extensions != null)) {
+      if (this._extensions == null) {
         this._extensions = [];
         _ref = getHubuExtensions();
         for (name in _ref) {
@@ -3071,7 +3071,7 @@ represents the published and required services for a specific h-ubu's component.
 
     Hub.prototype.getComponent = function(name) {
       var cmp, fc, n, _i, _len, _ref;
-      if (!(name != null)) {
+      if (name == null) {
         return null;
       }
       _ref = this._components;
@@ -3108,7 +3108,7 @@ represents the published and required services for a specific h-ubu's component.
       */
 
       var ext, _i, _len, _ref;
-      if (!(component != null)) {
+      if (component == null) {
         throw new Exception("Cannot register component - component is null");
       }
       if (!HUBU.UTILS.isComponent(component)) {
@@ -3135,7 +3135,7 @@ represents the published and required services for a specific h-ubu's component.
           return this["__name__"];
         };
       }
-      if (!(component.__hub__ != null) && !(component.hub != null)) {
+      if ((component.__hub__ == null) && (component.hub == null)) {
         component.__hub__ = this;
         component.hub = function() {
           return this.__hub__;
@@ -3176,7 +3176,7 @@ represents the published and required services for a specific h-ubu's component.
       */
 
       var instance;
-      if (!(factory != null)) {
+      if (factory == null) {
         throw new Exception("Cannot create instance - the given factory / constructor is null");
       }
       if (!HUBU.UTILS.isFunction(factory)) {
@@ -3201,13 +3201,13 @@ represents the published and required services for a specific h-ubu's component.
 
     Hub.prototype.unregisterComponent = function(component) {
       var cmp, ext, idx, _i, _len, _ref;
-      if (!(component != null)) {
+      if (component == null) {
         return this;
       }
       cmp = null;
       if (HUBU.UTILS.typeOf(component) === "string") {
         cmp = this.getComponent(component);
-        if (!(cmp != null)) {
+        if (cmp == null) {
           return this;
         }
       } else {
@@ -3385,9 +3385,10 @@ represents the published and required services for a specific h-ubu's component.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Thu Jun 20 2013 18:12:06 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Jun 23 2013 14:46:04 GMT-0400 (EDT)
 </footer>
 
 <script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>
