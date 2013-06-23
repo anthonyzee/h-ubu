@@ -185,28 +185,6 @@
                     </execution>
                 </executions> 
             </plugin>
-            <plugin>
-                <!-- Create the file to download -->
-                <groupId>com.github.github</groupId>
-                <artifactId>downloads-maven-plugin</artifactId>
-                <version>0.6</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>upload</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                    </execution>
-                </executions>
-                <configuration>
-                    <description>${project.version} version of ${project.name}</description>
-                    <override>true</override>
-                    <includeAttached>false</includeAttached>
-                    <includes>
-                        <include>${project.artifactId}*.js</include>
-                    </includes>    
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
