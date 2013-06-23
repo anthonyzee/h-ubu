@@ -93,7 +93,7 @@
 			<plugin>
 				<groupId>org.nanoko.coffee-mill</groupId>
 				<artifactId>coffee-mill-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>1.0.1-SNAPSHOT</version>
 				<extensions>true</extensions>
 				<configuration>
 					<javascriptAggregation>
@@ -140,7 +140,7 @@
                         <plugin>
                             <groupId>org.nanoko.coffee-mill</groupId>
                             <artifactId>coffee-mill-maven-plugin</artifactId>
-                            <version>1.0.0</version>
+                            <version>1.0.1-SNAPSHOT</version>
                             <configuration>
                                 <jsdocIncludePrivate>true</jsdocIncludePrivate>
                             </configuration>
