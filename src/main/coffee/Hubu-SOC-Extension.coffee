@@ -310,7 +310,7 @@ HUBU.ServiceDependency = class ServiceDependency
     self = this
     @_listener = {
       contract: @_contract,
-      filter : (ref) -> ref.getProperty("service.publisher") isnt self._component and (not self._filter? or self._filter(ref)),
+      filter : (ref) -> ref.getProperty("service.publisher") isnt self._component and (not self._filter? or self._filter(ref))
       listener : (event) ->
         switch event.getType()
           when SOC.ServiceEvent.REGISTERED then self._onServiceArrival(event.getReference())
@@ -341,7 +341,7 @@ HUBU.ServiceDependency = class ServiceDependency
   _startTracking : ->
     # Register service listener
     @_hub.registerServiceListener(@_listener)
-    # Immadiate / Defensive get
+    # Immediate / Defensive get
     refs = @_hub.getServiceReferences(@_contract, @_filter)
     @_onServiceArrival ref for ref in refs
 
