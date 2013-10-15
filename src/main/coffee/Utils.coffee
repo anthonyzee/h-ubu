@@ -48,7 +48,7 @@ getGlobal().Logger = class Logger
 
   constructor : (name = "") ->
     if (name.length > 0)
-      m_header = "[#{name}] "
+      @_header = "[#{name}] "
 
   _getConsole : ->
     if (window?.console?) then return window.console
