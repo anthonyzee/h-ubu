@@ -81,7 +81,7 @@ SOC.ServiceRegistration = class ServiceRegistration
     @_component = component
     @_hub = hub
     @_contract = contract
-    @_properties = properties ? {}
+    @_properties = `typeof properties === 'undefined' || properties === null ? {} : HUBU.UTILS.clone(properties)`
     @_registry = registry
     @_svcObject = svcObject
 
