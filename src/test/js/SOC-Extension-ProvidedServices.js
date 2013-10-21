@@ -48,6 +48,123 @@ describe("H-UBU Service Extension Tests - Provided Services", function () {
 
     });
 
+    it("should support providing two services", function() {
+        var contractA = {
+            doSomethingA : function() {}
+        };
+
+        var contractB = {
+            doSomethingB : function() {}
+        };
+
+        var component = {
+            hub : null,
+            configure : function(hub) {
+                this.hub = hub;
+                this.hub.provideService({
+                    component : this,
+                    contract: contractA
+                });
+                this.hub.provideService({
+                    component : this,
+                    contract: contractB
+                });
+            },
+            start : function() {},
+            stop : function() {},
+            getComponentName : function() { return "my-component"},
+            doSomethingA : function() {
+                return "hello A";
+            },
+            doSomethingB : function() {
+                return "hello B";
+            }
+        };
+
+        hub.registerComponent(component).start();
+        expect(hub.getServiceReferences(contractA).length).toBe(1);
+        expect(hub.getServiceReferences(contractB).length).toBe(1);
+
+        waitsFor(function() {
+            return  hub.getServiceReference(contractA) !== null &&
+                hub.getServiceReference(contractB) !== null;
+        }, "Service lookup never completed", 10000);
+
+        runs(function(){
+            var refA = hub.getServiceReference(contractA);
+            var refB = hub.getServiceReference(contractB);
+            expect(refA).toBeTruthy();
+            expect(refB).toBeTruthy();
+
+            expect(hub.getService(hub,refA).doSomethingA()).toBe("hello A");
+            expect(hub.getService(hub,refB).doSomethingB()).toBe("hello B");
+
+            hub.unregisterComponent(component);
+            expect(hub.getServiceReferences(contractA).length).toBe(0);
+            expect(hub.getServiceReferences(contractB).length).toBe(0);
+        });
+    });
+
+    it("should support providing two services whom share common methods", function() {
+        var contractA = {
+            doCommon : function() {}
+        };
+
+        var contractB = {
+            doSomethingB : function() {},
+            doCommon : function() {}
+        };
+
+        var component = {
+            hub : null,
+            configure : function(hub) {
+                this.hub = hub;
+                this.hub.provideService({
+                    component : this,
+                    contract: contractA
+                });
+                this.hub.provideService({
+                    component : this,
+                    contract: contractB
+                });
+            },
+            start : function() {},
+            stop : function() {},
+            getComponentName : function() { return "my-component"},
+            doSomethingB : function() {
+                return "hello B";
+            },
+            doCommon : function() {
+                return true;
+            }
+
+        };
+
+        hub.registerComponent(component).start();
+        expect(hub.getServiceReferences(contractA).length).toBe(1);
+        expect(hub.getServiceReferences(contractB).length).toBe(1);
+
+        waitsFor(function() {
+            return  hub.getServiceReference(contractA) !== null &&
+                hub.getServiceReference(contractB) !== null;
+        }, "Service lookup never completed", 10000);
+
+        runs(function(){
+            var refA = hub.getServiceReference(contractA);
+            var refB = hub.getServiceReference(contractB);
+            expect(refA).toBeTruthy();
+            expect(refB).toBeTruthy();
+
+            expect(hub.getService(hub,refB).doCommon()).toBe(true);
+            expect(hub.getService(hub,refA).doCommon()).toBe(true);
+            expect(hub.getService(hub,refB).doSomethingB()).toBe("hello B");
+
+            hub.unregisterComponent(component);
+            expect(hub.getServiceReferences(contractA).length).toBe(0);
+            expect(hub.getServiceReferences(contractB).length).toBe(0);
+        });
+    });
+
     it("should support adding provided services with properties", function() {
         var contract = {
             doSomething : function() {}
@@ -79,6 +196,49 @@ describe("H-UBU Service Extension Tests - Provided Services", function () {
         hub.unregisterComponent(component);
         expect(hub.getServiceReferences(contract).length).toBe(0);
 
+    });
+
+    it("should support providing two services whom share common properties reference", function() {
+        var props = {"toto" : true };
+
+        var contractA = {
+            doCommon : function() {}
+        };
+
+        var contractB = {
+            doSomethingB : function() {},
+            doCommon : function() {}
+        };
+
+        var component = {
+            hub : null,
+            configure : function(hub) {
+                this.hub = hub;
+                this.hub.provideService({
+                    component : this,
+                    contract: contractA,
+                    properties: props
+                });
+                this.hub.provideService({
+                    component : this,
+                    contract: contractB,
+                    properties: props
+                });
+            },
+            start : function() {},
+            stop : function() {},
+            getComponentName : function() { return "my-component"},
+            doSomethingB : function() {
+                return "hello B";
+            },
+            doCommon : function() {
+                return true;
+            }
+        };
+
+        hub.registerComponent(component).start();
+        expect(hub.getServiceReferences(contractA).length).toBe(1);
+        expect(hub.getServiceReferences(contractB).length).toBe(1);
     });
 
     it("should not let access members not from the contract", function() {
