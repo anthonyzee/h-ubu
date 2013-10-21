@@ -86,7 +86,7 @@ describe("H-UBU Service Extension Tests - Service Dependencies", function () {
             },
             start : function() {},
             stop : function() {},
-            getComponentName : function() { return "my-component"}
+            getComponentName : function() { return "my-component";}
         };
 
         hub.registerComponent(component).start();
@@ -94,15 +94,15 @@ describe("H-UBU Service Extension Tests - Service Dependencies", function () {
 
         var prov = {
             configure : function(hub) {
-                this.hub = hub
+                this.hub = hub;
             },
             start : function() {
-                this.reg = this.hub.registerService(this, contract)
+                this.reg = this.hub.registerService(this, contract);
             },
             stop : function() {},
-            getComponentName : function() { return "my-provider"},
-            doSomething : function() { return "hello" }
-        }
+            getComponentName : function() { return "my-provider";},
+            doSomething : function() { return "hello"; }
+        };
 
         hub.registerComponent(prov);
         // Check injection.
@@ -415,13 +415,13 @@ describe("H-UBU Service Extension Tests - Service Dependencies", function () {
                 if (ref === undefined || ref === null) {
                     self.fail("Invalid reference in the bind method");
                 }
-                this.svc.push(svc)
+                this.svc.push(svc);
             },
             unbind : function(svc, ref) {
                 if (ref === undefined || ref === null) {
                     self.fail("Invalid reference in the unbind method");
                 }
-                HUBU.UTILS.removeElementFromArray(this.svc, svc)
+                HUBU.UTILS.removeElementFromArray(this.svc, svc);
             }
         };
 
@@ -809,6 +809,68 @@ describe("H-UBU Service Extension Tests - Service Dependencies", function () {
         hub.unregisterComponent("A");
     });
 
+    it("should support requiring a service from a provider that provides two services with common methods.", function() {
+        var contractA = Object.create(null);
+        contractA.doCommon = function() {};
 
+        var contractB = Object.create(null);
+        contractB.doSomethingB = function() {};
+        contractB.doCommon = function() {};
+
+        var prov = {
+            hub : null,
+            configure : function(hub) {
+                this.hub = hub;
+                this.hub.provideService({
+                    component : this,
+                    contract: contractA,
+                    properties: {"toto" : true}
+                });
+                this.hub.provideService({
+                    component : this,
+                    contract: contractB,
+                    properties: {"toto" : true}
+                });
+            },
+            start : function() {},
+            stop : function() {},
+            getComponentName : function() { return "my-provider"},
+            doSomethingB : function() {
+                return "hello B";
+            },
+            doCommon : function() {
+                return true;
+            }
+        };
+
+        var component = {
+            hub : null,
+            svc : null,
+            configure : function(hub) {
+                this.hub = hub;
+                hub.requireService({
+                    component: component,
+                    contract: contractA,
+                    field : "svc"
+                });
+            },
+            start : function() {},
+            stop : function() {},
+            getComponentName : function() { return "my-component"}
+        };
+
+        hub.registerComponent(component);
+        hub.registerComponent(prov);
+        hub.start();
+
+
+        // Check injection.
+        expect(hub.getServiceReferences(contractA).length).toBe(1);
+        expect(component.svc.doCommon()).toBe(true);
+
+        hub.unregisterComponent(prov);
+        expect(hub.getServiceReferences(contractA).length).toBe(0);
+        expect(component.svc).toBeNull();
+    });
 
 });
